@@ -1,6 +1,7 @@
 package modelo.mundo;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -290,15 +291,29 @@ public class Hospital {
     public static void main(String[] args) {
 		ArrayList<Paciente> pacientes = new ArrayList<Paciente>();
 
-		pacientes.add(new Paciente("012345678", "Juan", "Diaz", "abcd", "Covid"));
-		pacientes.add(new Paciente("123456789", "Maria", "Perez", "efgh", "Quemadura"));
+		Scanner entrada = new Scanner (System.in);
+		System.out.println("SISTEMA DE INGRESO DE PACIENTES A LA UCI");
+		System.out.print("CEDULA: ");
+		String cedula = entrada.nextLine(); 
+		System.out.print("NOMBRE: ");
+		String nombre = entrada.nextLine();
+		System.out.print("APELLIDO: ");
+		String apellido = entrada.nextLine();
+		System.out.print("HISTORIAL MEDICO: ");
+		String historial = entrada.nextLine();
+		System.out.print("DIAGNOSTICO: ");
+		String diagnostico = entrada.nextLine();
+
+	
+		pacientes.add(new Paciente(cedula, nombre, apellido, historial, diagnostico));
+		/*pacientes.add(new Paciente("123456789", "Maria", "Perez", "efgh", "Quemadura"));
 		pacientes.add(new Paciente("987654321", "Leo", "Castro", "ijkl", "Cirujia"));
 		pacientes.add(new Paciente("012345677", "Pablo", "Aguirre", "mnño", "Covid"));
 		pacientes.add(new Paciente("123456787", "Pedro", "Marin", "pqrs", "Quemadura"));
 		pacientes.add(new Paciente("987654327", "Joan", "Chase", "tuvw", "Cirujia"));
 		pacientes.add(new Paciente("012345676", "Freddy", "Cordova", "xyza", "Covid"));
 		pacientes.add(new Paciente("123456786", "Ricardo", "Mejia", "zyxw", "Quemadura"));
-		pacientes.add(new Paciente("987654326", "Jenniffer", "Montufar", "vuts", "Cirujia"));
+		pacientes.add(new Paciente("987654326", "Jenniffer", "Montufar", "vuts", "Cirujia"));*/
 
 
 		try {
@@ -339,7 +354,7 @@ public class Hospital {
 		      } finally {
 		        cursor.close();
 		      }
-/*
+			
 		      // PASO 4.3: "UPDATE" -> Actualizamos el apellido de los pacientes
 		      DBObject find = new BasicDBObject("apellido", new BasicDBObject("$gt", "Perez"));
 		      DBObject updated = new BasicDBObject().append("$inc", new BasicDBObject().append("apellido", "Chasiguano"));
@@ -347,7 +362,7 @@ public class Hospital {
 
 		      // PASO 4.4: "DELETE" -> Borramos todos los pacientes que tengan quemaduras
 		      DBObject findDoc = new BasicDBObject("diagnostico", "Quemadura");
-		      collection.remove(findDoc);*/
+		      collection.remove(findDoc);
 
 		    // PASO FINAL: Cerrar la conexion
 		      mongoClient.close();		
