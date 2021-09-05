@@ -36,7 +36,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Usuario/eclipse-workspace/ProyectoHospital3.0/mongo-java-driver-3.12.7.jar"/>
+	<classpathentry kind="lib" path="E:/Users/Usuario/Desktop/Applications/5. ESPE/5. III Nivel/1. Programacion Orientada a Objetos/3. Unidad III/5. Proyecto/ProyectoHospital3.0/mongo-java-driver-3.12.7.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

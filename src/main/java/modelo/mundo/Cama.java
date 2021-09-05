@@ -7,13 +7,13 @@ public class Cama {
     public enum Clase {
         COVID,				//Clases COVID
         QUEMADOS,			//Clases Quemados
-        CIRUJIA				//Clases Cirujia
+        CIRUGIA				//Clases Cirujia
     }
 
     public enum Ubicacion {
-        AREA_COVID,				//Ubicacion fase terminal
-        AREA_QUEMADOS,			//Ubicacion fase recuperacion
-        AREA_CIRUJIA				//Ubicacion recien ingresados
+        AREA_COVID,					//Ubicacion fase terminal
+        AREA_QUEMADOS,				//Ubicacion fase recuperacion
+        AREA_CIRUGIA				//Ubicacion recien ingresados
     }
 
 

@@ -9,16 +9,16 @@ public class Paciente {
     private String nombre;		//Nombre del paciente
     private String apellido;	//Apellido del paciente
     private String historial;	//Numero del historial medico del paciente
-    private String diagnostico;	//Diagnostico del paciente
+    private String fechaIngreso;	//FechaIngreso del paciente
 
 
     // Constructor
-    public Paciente(String pCedula, String pNombre, String pApellido, String pHistorial, String pDiagnostico){
+    public Paciente(String pCedula, String pNombre, String pApellido, String pHistorial, String pFechaIngreso){
         cedula = pCedula;
         nombre = pNombre;
         apellido = pApellido;
         historial = pHistorial;
-        diagnostico = pDiagnostico;
+        fechaIngreso = pFechaIngreso;
     }
 
 
@@ -39,8 +39,8 @@ public class Paciente {
         return historial;
     }
     
-    public String darDiagnostico(){
-        return diagnostico;
+    public String darFechaIngreso(){
+        return fechaIngreso;
     }
 
     
@@ -55,59 +55,10 @@ public class Paciente {
     
     @Override
 	public String toString() {
-		return "Paciente [cedula=" + cedula + ", nombre=" + nombre + ", apellido=" + apellido + ", historial=" + historial + ", diagnostico=" + diagnostico + "]";
+		return "Paciente [cedula=" + cedula + ", nombre=" + nombre + ", apellido=" + apellido + ", historial=" + historial + ", diagnostico=" + fechaIngreso + "]";
 	}
  
-    
-/////////////////////////////////////////////////////////////////////////
-//////**********************MONGO DB***************************//////////
-/////////////////////////////////////////////////////////////////////////
 
-	// Transformo un objecto que me da MongoDB a un Objecto Java
-    public Paciente(BasicDBObject dBObjectPaciente) {
-    	this.cedula = dBObjectPaciente.getString("cedula");
-    	this.nombre = dBObjectPaciente.getString("nombre");
-    	this.apellido = dBObjectPaciente.getString("apellido");
-    	this.historial = dBObjectPaciente.getString("historial");
-    	this.diagnostico = dBObjectPaciente.getString("diagnostico");
-    }
-
-    public BasicDBObject toDBObjectPaciente() {
-        BasicDBObject dBObjectPaciente = new BasicDBObject();			//Crea una instancia de BasicDBObject
-        dBObjectPaciente.append("Cedula", this.darCedula());
-        dBObjectPaciente.append("Nombre", this.darNombre());
-        dBObjectPaciente.append("Apellido", this.darApellido());
-        dBObjectPaciente.append("Historial", this.darHistorial());
-        dBObjectPaciente.append("diagnostico", this.darDiagnostico());
-       
-
-        return dBObjectPaciente;
-    }
-
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 
 }
+

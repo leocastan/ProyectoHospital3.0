@@ -1,38 +1,34 @@
 package modelo.mundo;
 
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.List;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
-
+import conexionMongoDb.HospitalDao;
 import modelo.mundo.Cama.Clase;
 import modelo.mundo.Cama.Ubicacion;
 
 
 public class Hospital {
+    private HospitalDao hospitalDao;
+    
     // Constantes
     public final static int CAMAS_COVID = 7;		//Numero de camas COVID
     public final static int CAMAS_QUEMADOS = 7;		//Numero de camas Quemados
-    public final static int CAMAS_CIRUJIA = 7;		//Numero de camas Cirujia
+    public final static int CAMAS_CIRUGIA = 7;		//Numero de camas Cirujia
 
 
     // Atributos
     private Cama[] camasCovid;					//Camas de la clase COVID
     private Cama[] camasQuemados;				//Camas de la clase Quemados
-    private Cama[] camasCirujia;				//Camas de la clase Cirujia
-    
+    private Cama[] camasCirugia;				//Camas de la clase Cirujia
    
     // Constructores
-    public Hospital( ){											//Se crea el hospital, se inicializan las listas de camas COVID, Quemados y cirujia
+    public Hospital( ) {										// Se crea el hospital, se inicializan las listas de camas COVID, Quemados y cirujia
+       hospitalDao = HospitalDao.getInstance();
+        
         //Ubicacion ubicacion;
-        camasCovid = new Cama[CAMAS_COVID];						//Crea las camas COVID
-        camasQuemados = new Cama[CAMAS_QUEMADOS];				//Crea las camas Quemados
-        camasCirujia = new Cama[CAMAS_CIRUJIA];					//Crea las camas Cirujia
+        camasCovid = new Cama[CAMAS_COVID];						// Crea las camas COVID
+        camasQuemados = new Cama[CAMAS_QUEMADOS];				// Crea las camas Quemados
+        camasCirugia = new Cama[CAMAS_CIRUGIA];					// Crea las camas Cirujia
 
         camasCovid[ 0 ] = new Cama( 1, Clase.COVID, Ubicacion.AREA_COVID);
         camasCovid[ 1 ] = new Cama( 2, Clase.COVID, Ubicacion.AREA_COVID);
@@ -50,55 +46,70 @@ public class Hospital {
         camasQuemados[ 5 ] = new Cama( 16, Clase.QUEMADOS, Ubicacion.AREA_QUEMADOS);
         camasQuemados[ 6 ] = new Cama( 17, Clase.QUEMADOS, Ubicacion.AREA_QUEMADOS);
         
-        camasCirujia[ 0 ] = new Cama( 21, Clase.CIRUJIA, Ubicacion.AREA_CIRUJIA);
-        camasCirujia[ 1 ] = new Cama( 22, Clase.CIRUJIA, Ubicacion.AREA_CIRUJIA);
-        camasCirujia[ 2 ] = new Cama( 23, Clase.CIRUJIA, Ubicacion.AREA_CIRUJIA);
-        camasCirujia[ 3 ] = new Cama( 24, Clase.CIRUJIA, Ubicacion.AREA_CIRUJIA);
-        camasCirujia[ 4 ] = new Cama( 25, Clase.CIRUJIA, Ubicacion.AREA_CIRUJIA);
-        camasCirujia[ 5 ] = new Cama( 26, Clase.CIRUJIA, Ubicacion.AREA_CIRUJIA);
-        camasCirujia[ 6 ] = new Cama( 27, Clase.CIRUJIA, Ubicacion.AREA_CIRUJIA);
+        camasCirugia[ 0 ] = new Cama( 21, Clase.CIRUGIA, Ubicacion.AREA_CIRUGIA);
+        camasCirugia[ 1 ] = new Cama( 22, Clase.CIRUGIA, Ubicacion.AREA_CIRUGIA);
+        camasCirugia[ 2 ] = new Cama( 23, Clase.CIRUGIA, Ubicacion.AREA_CIRUGIA);
+        camasCirugia[ 3 ] = new Cama( 24, Clase.CIRUGIA, Ubicacion.AREA_CIRUGIA);
+        camasCirugia[ 4 ] = new Cama( 25, Clase.CIRUGIA, Ubicacion.AREA_CIRUGIA);
+        camasCirugia[ 5 ] = new Cama( 26, Clase.CIRUGIA, Ubicacion.AREA_CIRUGIA);
+        camasCirugia[ 6 ] = new Cama( 27, Clase.CIRUGIA, Ubicacion.AREA_CIRUGIA);
         
-
-       /* for( int numCama = 1 + CAMAS_COVID, j = 1; j <= CAMAS_QUEMADOS; numCama++, j++ ){
-            if( j % 6 == 1 || j % 6 == 0 )				//Camas Recien				
-                ubicacion = Ubicacion.AREA_COVID;
-            else if( j % 6 == 2 || j % 6 == 5 )			//Camas Recuperacion	
-                ubicacion = Ubicacion.AREA_QUEMADOS;
-            else
-                ubicacion = Ubicacion.AREA_CIRUJIA;			//Camas terminal
-
-            camasQuemados[ j - 1 ] = new Cama(numCama, Clase.QUEMADOS, ubicacion );
-        }*/
+        cargarDatosBD();
+    }
+    
+    private void cargarDatosBD() {
+        Cama camas[] = new Cama[21];
+        
+        int i = 0;
+        
+        for (Cama c : camasCirugia) {
+            camas[i++] = c;
+        }
+        
+        for (Cama c : camasCovid) {
+            camas[i++] = c;
+        }
+        
+        for (Cama c : camasQuemados) {
+            camas[i++] = c;
+        }
+        
+        hospitalDao.guardarCamas(camas);
+        
+        List<Cama> camasBD = hospitalDao.obtenerCamas();
+        int indiceQuemados = 0;
+        int indiceCirugia = 0;
+        int indiceCovid = 0;
+        
+        for (Cama cama : camasBD) {
+            if (cama.darPaciente() == null) continue;
+            
+            if (cama.darClase() == Cama.Clase.QUEMADOS) {
+                camasQuemados[indiceQuemados++] = cama;
+            } else if (cama.darClase() == Cama.Clase.CIRUGIA) {
+                camasCirugia[indiceCirugia++] = cama;
+            } else {
+                camasCovid[indiceCovid++] = cama;
+            }
+        }
     }
 
     
-    ////////////////////
-    /*public Hospital( int pNumero,  Ubicacion pUbicacion, boolean asignado )
-    {
-        numero = pNumero;
-        ubicacion = pUbicacion;
-        // Inicialmente no hay ningún huesped en la habitacion
-        this.asignado = false;
-        
-        this.paciente = null;
-        
-    }*/
-    
-    ////////////////////
- 
     // Métodos
     public Cama asignarCama(Clase pClase, Ubicacion pUbicacion, Paciente pPaciente){    //Asigna la cmaa en la clase y ubicacion especificados
     	Cama cama = null;									//Busca una cama libre
-    	if( pClase == Clase.COVID ){
+        
+    	if( pClase == Clase.COVID ) {
     		cama = buscarCamaCovidLibre( pUbicacion );
-    	}else if( pClase == Clase.QUEMADOS ){
+    	} else if( pClase == Clase.QUEMADOS ) {
     		cama = buscarCamaQuemadosLibre( pUbicacion );
-    	}else if( pClase == Clase.CIRUJIA ){
-    		cama = buscarCamaCirujiaLibre( pUbicacion );
+    	} else if( pClase == Clase.CIRUGIA ) {
+    		cama = buscarCamaCirugiaLibre( pUbicacion );
     	}
 
     	if( cama != null ){
     		cama.asignarAPaciente(pPaciente);
+            hospitalDao.guardarCama(cama);
     	}
     	return cama;
     }
@@ -136,11 +147,11 @@ public class Hospital {
     }
     
     
-    public Cama buscarCamaCirujiaLibre( Ubicacion pUbicacion ){					//Busca la siguiente cama Quemados que este libre y tenga la ubicacion indicada
+    public Cama buscarCamaCirugiaLibre( Ubicacion pUbicacion ){					//Busca la siguiente cama Quemados que este libre y tenga la ubicacion indicada
         boolean encontrado = false;
         Cama cama = null;
-        for( int i = 0; i < CAMAS_CIRUJIA && !encontrado; i++ ){
-            cama = camasCirujia[ i ];
+        for( int i = 0; i < CAMAS_CIRUGIA && !encontrado; i++ ){
+            cama = camasCirugia[ i ];
             if( ! (cama.camaAsignada()) && cama.darUbicacion() == pUbicacion){
                 encontrado = true;
             }
@@ -158,7 +169,7 @@ public class Hospital {
             cama = buscarPacienteQuemado(pPaciente);					//Si no esta en COVID, busca en quemados
         }
         if( cama == null){
-            cama = buscarPacienteCirujia(pPaciente);					//Si no esta en quemados o COVID, busca en cirujia
+            cama = buscarPacienteCirugia(pPaciente);					//Si no esta en quemados o COVID, busca en cirujia
         }
         return cama;
     }
@@ -196,11 +207,11 @@ public class Hospital {
     }
     
 
-    public Cama buscarPacienteCirujia(Paciente pPaciente){		//Busca un paciente en Quemados	
+    public Cama buscarPacienteCirugia(Paciente pPaciente){		//Busca un paciente en Quemados	
         boolean encontrado = false;
         Cama cama = null;
-        for( int i = 0; i < CAMAS_CIRUJIA && !encontrado; i++ ){
-            cama = camasCirujia[ i ];
+        for( int i = 0; i < CAMAS_CIRUGIA && !encontrado; i++ ){
+            cama = camasCirugia[ i ];
             if( cama.camaAsignada( ) && cama.darPaciente( ).igualA( pPaciente)){
                 encontrado = true;
             }
@@ -218,6 +229,7 @@ public class Hospital {
         if(cama != null ){									//Si lo encuentra desasigna cama
             cama.desasignarCama( );
             resultado = true;
+            hospitalDao.guardarCama(cama);
         }
         return resultado;
     }
@@ -245,10 +257,10 @@ public class Hospital {
     }
     
     
-    public int contarCamasCirujiaOcupadas( ){			//Retorna el numero de camas Quemados ocupadas
+    public int contarCamasCirugiaOcupadas( ){			//Retorna el numero de camas Quemados ocupadas
         int contador = 0;
-        for( Cama camaCirujia : camasCirujia){
-            if( camaCirujia.camaAsignada( ) ){
+        for( Cama camaCirugia : camasCirugia){
+            if( camaCirugia.camaAsignada( ) ){
                 contador++;
             }
         }
@@ -258,10 +270,10 @@ public class Hospital {
     
     public double calcularPorcentajeOcupacion( ){		//Calcula el porcentaje de ocupacion de la UCI
         double porcentaje;
-        int totalCamas = CAMAS_COVID + CAMAS_QUEMADOS + CAMAS_CIRUJIA;
+        int totalCamas = CAMAS_COVID + CAMAS_QUEMADOS + CAMAS_CIRUGIA;
        // System.out.println(totalCamas);
-        int camasOcupadas = contarCamasCovidOcupadas( ) + contarCamasQuemadosOcupadas( ) + contarCamasCirujiaOcupadas();
-        porcentaje = ( double )camasOcupadas / totalCamas * 100;
+        int camasOcupadas = contarCamasCovidOcupadas( ) + contarCamasQuemadosOcupadas( ) + contarCamasCirugiaOcupadas();
+        porcentaje = ( double )camasOcupadas *100 / totalCamas;
        // System.out.println(porcentaje);
         return porcentaje;
     }
@@ -277,127 +289,18 @@ public class Hospital {
     }
     
 
-    public Cama[] obtenerCamasCirujia( ){		//Retorna las camas Quemados de la UCI
-        return camasCirujia;
+    public Cama[] obtenerCamasCirugia( ){		//Retorna las camas Quemados de la UCI
+        return camasCirugia;
     }
 
-    
-    
-    
-    /////////////////////////////////////////////////////////////////////////
-    //////**********************MONGO DB***************************//////////
-    /////////////////////////////////////////////////////////////////////////
-    
-    public static void main(String[] args) {
-		ArrayList<Paciente> pacientes = new ArrayList<Paciente>();
-
-		Scanner entrada = new Scanner (System.in);
-		System.out.println("SISTEMA DE INGRESO DE PACIENTES A LA UCI");
-		System.out.print("CEDULA: ");
-		String cedula = entrada.nextLine(); 
-		System.out.print("NOMBRE: ");
-		String nombre = entrada.nextLine();
-		System.out.print("APELLIDO: ");
-		String apellido = entrada.nextLine();
-		System.out.print("HISTORIAL MEDICO: ");
-		String historial = entrada.nextLine();
-		System.out.print("DIAGNOSTICO: ");
-		String diagnostico = entrada.nextLine();
-
-	
-		pacientes.add(new Paciente(cedula, nombre, apellido, historial, diagnostico));
-		/*pacientes.add(new Paciente("123456789", "Maria", "Perez", "efgh", "Quemadura"));
-		pacientes.add(new Paciente("987654321", "Leo", "Castro", "ijkl", "Cirujia"));
-		pacientes.add(new Paciente("012345677", "Pablo", "Aguirre", "mnño", "Covid"));
-		pacientes.add(new Paciente("123456787", "Pedro", "Marin", "pqrs", "Quemadura"));
-		pacientes.add(new Paciente("987654327", "Joan", "Chase", "tuvw", "Cirujia"));
-		pacientes.add(new Paciente("012345676", "Freddy", "Cordova", "xyza", "Covid"));
-		pacientes.add(new Paciente("123456786", "Ricardo", "Mejia", "zyxw", "Quemadura"));
-		pacientes.add(new Paciente("987654326", "Jenniffer", "Montufar", "vuts", "Cirujia"));*/
+      
+    public String metodo1( ) { 				//Metodo para la extension 1
+        return "Desea Salir";
+    }
 
 
-		try {
-			MongoClient mongoClient = new MongoClient("localhost", 27017);	// Conexion al servidor de MongoDB pasando el host y el puerto
-			System.out.println("Conexion exitosa");
-			DB db = mongoClient.getDB("Hospital");							//Conexion a la base de datos "Hospital"
-			DBCollection collection = db.getCollection("Pacientes");     	//Se obtiene coleccion para trabajar con ella
+    public String salir( ){ 				//Metodo para la extension 2
+        return "Desaea Guardar";
+    }
 
-
-
-			//CRUD
-			// PASO 4.1: "CREATE" -> Metemos los objetos pacientes (o documentos en Mongo) en la coleccion Paciente
-			for (Paciente pac : pacientes) {
-				collection.insert(pac.toDBObjectPaciente());
-			}
-			// PASO 4.2.1: "READ" -> Leemos todos los documentos de la base de datos
-			int numDocumentos = (int) collection.getCount();
-			System.out.println("Número de documentos en la colección Pacientes: " + numDocumentos + "\n");
-			// Busco todos los documentos de la colección y los imprimo
-			DBCursor cursor = collection.find();
-			try {
-				while (cursor.hasNext()) {
-					System.out.println(cursor.next().toString());
-				}
-			} finally {
-				cursor.close();
-			}
-
-			 // PASO 4.2.2: "READ" -> Hacemos una Query con condiciones y lo pasamos a un objeto Java
-		      System.out.println("\nPacientes que tienen diagnostico Covid");
-		      DBObject query = new BasicDBObject("Diagnostico", new BasicDBObject("$regex", "Covid"));
-		      cursor = collection.find(query);
-		      try {
-		        while (cursor.hasNext()) {
-		          Paciente paciente = new Paciente((BasicDBObject) cursor.next());
-		          System.out.println(paciente.toString());
-		        }
-		      } finally {
-		        cursor.close();
-		      }
-			
-		      // PASO 4.3: "UPDATE" -> Actualizamos el apellido de los pacientes
-		      DBObject find = new BasicDBObject("apellido", new BasicDBObject("$gt", "Perez"));
-		      DBObject updated = new BasicDBObject().append("$inc", new BasicDBObject().append("apellido", "Chasiguano"));
-		      collection.update(find, updated, false, true);
-
-		      // PASO 4.4: "DELETE" -> Borramos todos los pacientes que tengan quemaduras
-		      DBObject findDoc = new BasicDBObject("diagnostico", "Quemadura");
-		      collection.remove(findDoc);
-
-		    // PASO FINAL: Cerrar la conexion
-		      mongoClient.close();		
-			
-	    }catch (Exception ex) {
-	        	System.out.println("Error al conectar al Server MongoDB"  + ex.getMessage());
-	    }
-	}
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 }

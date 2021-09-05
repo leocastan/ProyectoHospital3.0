@@ -53,7 +53,7 @@ public class HospitalTest {
         hospital.asignarCama(Clase.QUEMADOS, Ubicacion.AREA_QUEMADOS, p2 );
         
         //Asigna al tercer paciente en una cama de cirujia del area de cirujia
-        hospital.asignarCama(Clase.CIRUJIA,Ubicacion.AREA_CIRUJIA, p3);
+        hospital.asignarCama(Clase.CIRUGIA,Ubicacion.AREA_CIRUGIA, p3);
     }
 	
 	
@@ -106,9 +106,9 @@ public class HospitalTest {
         setupEscenario1( );
         camaP3 = hospital.buscarPaciente( p3 );
         // El paciente 2 se ubica en area de quemados
-        assertEquals( Clase.CIRUJIA, camaP3.darClase( ) );
+        assertEquals( Clase.CIRUGIA, camaP3.darClase( ) );
         // El paciente 2 se ubica en el area de quemados
-        assertEquals( Ubicacion.AREA_CIRUJIA, camaP3.darUbicacion( ) );
+        assertEquals( Ubicacion.AREA_CIRUGIA, camaP3.darUbicacion( ) );
         // La primera cama cirujia es la número 21
         assertEquals( 21, camaP3.darNumero( ) );
         // El pasajero debe ser el mismo
@@ -195,7 +195,7 @@ public class HospitalTest {
         Paciente p1 = new Paciente( "987654321", "Leo", "Castro", "zyxw", "Cirujia" );
         // Configura los datos de prueba
         setupEscenario1( );
-        c = hospital.buscarPacienteCirujia( p1 );
+        c = hospital.buscarPacienteCirugia( p1 );
         if( c == null )
             fail( "El paciente debería existir" );
         else{
@@ -214,7 +214,7 @@ public class HospitalTest {
         Paciente p2 = new Paciente("Cirujia", "zyxw", "Castro", "Leo", "987654321" );
         // Configura los datos de prueba
         setupEscenario1( );
-        c = hospital.buscarPacienteCirujia( p2 );
+        c = hospital.buscarPacienteCirugia( p2 );
         if( c == null )
             assertTrue( true );
         else
@@ -262,7 +262,7 @@ public class HospitalTest {
         // Configura los datos de prueba
         setupEscenario1( );
         // La siguiente cama quemados de terminal libre es la 22
-        c = hospital.buscarCamaCirujiaLibre( Ubicacion.AREA_CIRUJIA);
+        c = hospital.buscarCamaCirugiaLibre( Ubicacion.AREA_CIRUGIA);
         assertEquals(22, c.darNumero( ) );
         // La siguiente cama quemados de recien ingresados libre es la 9
         /*c = hospital.buscarCamaQuemadosLibre( Ubicacion.AREA_COVID);
@@ -289,7 +289,7 @@ public class HospitalTest {
         // Asigno otros tres pacientes
         hospital.asignarCama( Clase.QUEMADOS, Ubicacion.AREA_QUEMADOS, p4 );
         hospital.asignarCama( Clase.COVID, Ubicacion.AREA_COVID, p5 );
-        hospital.asignarCama( Clase.CIRUJIA, Ubicacion.AREA_CIRUJIA, p6 );
+        hospital.asignarCama( Clase.CIRUGIA, Ubicacion.AREA_CIRUGIA, p6 );
         // Ahora el porcentaje es 6*100/21 ///////ojo///////////
         porcentajeEsperado = 28.57142857142857;
         porcentaje = hospital.calcularPorcentajeOcupacion( );
@@ -341,10 +341,10 @@ public class HospitalTest {
         Paciente p3 = new Paciente( "234567890", "Mia", "Marin", "ijkl", "Cirujia");
         Paciente p4 = new Paciente( "345678901", "Pedro", "Pluas", "mnop","Cirujia");
         // Inicialmente las camas cirujia ocupadas es 1
-        assertEquals( 1, hospital.contarCamasCirujiaOcupadas( ) );
+        assertEquals( 1, hospital.contarCamasCirugiaOcupadas( ) );
         // Asigno otros dos pasajeros
-        hospital.asignarCama( Clase.CIRUJIA, Ubicacion.AREA_CIRUJIA, p3 );
-        hospital.asignarCama( Clase.CIRUJIA, Ubicacion.AREA_CIRUJIA, p4 );
+        hospital.asignarCama( Clase.CIRUGIA, Ubicacion.AREA_CIRUGIA, p3 );
+        hospital.asignarCama( Clase.CIRUGIA, Ubicacion.AREA_CIRUGIA, p4 );
         // Ahora el numero de camas ocupadas es 3////ojo////
         assertEquals( 1, hospital.contarCamasQuemadosOcupadas( ) );
     }
