@@ -7,8 +7,6 @@ import java.text.NumberFormat;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.UIManager;
-
 import modelo.mundo.*;
 
 

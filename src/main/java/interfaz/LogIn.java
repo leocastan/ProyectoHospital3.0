@@ -82,7 +82,7 @@ public class LogIn extends JFrame {
         			p.setVisible(true);
 
         		}else {
-        			JOptionPane.showMessageDialog(null, "Usuario o Contraseña incorrector", "ERROR", JOptionPane.ERROR_MESSAGE );
+        			JOptionPane.showMessageDialog(null, "Usuario o Contraseña incorrectos", "ERROR", JOptionPane.ERROR_MESSAGE );
         			txtUsuario.setText("");
         			pfClave.setText("");
         			txtUsuario.requestFocus();

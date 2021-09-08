@@ -49,8 +49,8 @@ public class DialogoAsignacion extends JDialog implements ActionListener{			//Fo
     private JPanel panelDatos;						//Panel con los datos
     private JButton botonAceptar;					//Boton aceptar
     private JButton botonCancelar;					//Boton cancelar
-    private JComboBox cbClase;						//Combo de seleccion de la clase
-    private JComboBox cbUbicacion;					//Combo de seleccion de la ubicacion
+	private JComboBox cbClase;						//Combo de seleccion de la clase
+	private JComboBox cbUbicacion;					//Combo de seleccion de la ubicacion
     private JTextField txtCedula;					//Texto de ingreso de la cedula
     private JTextField txtNombre;					//Texto de ingreso del nombre
     private JTextField txtApellido;					//Texto de ingreso del apellido

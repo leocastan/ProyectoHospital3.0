@@ -62,7 +62,7 @@ public class DialogoDatosPaciente extends JDialog {		//Formulario para presentar
 		JLabel etiquetaNombre = new JLabel( "Nombre: " );
 		panelDatosPaciente.add( etiquetaNombre );
 
-		txtNombre = new JTextField( paciente.darNombre( ) );
+		txtNombre = new JTextField( paciente.darApellido() + " "+ paciente.darNombre( ));
 		txtNombre.setColumns( 15 );
 		txtNombre.setEditable( false );
 		panelDatosPaciente.add( txtNombre );
@@ -79,7 +79,7 @@ public class DialogoDatosPaciente extends JDialog {		//Formulario para presentar
 		JLabel etiquetaFechaIngreso = new JLabel( "Fecha Ingreso: " );
 		panelDatosPaciente.add( etiquetaFechaIngreso );
 
-		txtFechaIngreso = new JTextField( pCama.darNumero( ) + "" );
+		txtFechaIngreso = new JTextField( paciente.darFechaIngreso() + "" );
 		txtFechaIngreso.setEditable( false );
 		panelDatosPaciente.add( txtFechaIngreso );
 				
@@ -100,6 +100,7 @@ public class DialogoDatosPaciente extends JDialog {		//Formulario para presentar
 		txtClase.setEditable( false );
 		panelDatosPaciente.add( txtClase );
 
+		
 		// Ubicación
 		JLabel etiquetaUbicacion = new JLabel( "Ubicación: " );
 		panelDatosPaciente.add( etiquetaUbicacion );
@@ -114,6 +115,7 @@ public class DialogoDatosPaciente extends JDialog {		//Formulario para presentar
 		}
 		txtUbicacion = new JTextField( sUbicacion );
 		txtUbicacion.setEditable( false );
+		
 		panelDatosPaciente.add( txtUbicacion );
 		add( panelDatosPaciente, BorderLayout.CENTER );
 
